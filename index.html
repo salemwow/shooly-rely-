@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رحلة ملوك المملكة</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Cairo', sans-serif;
+            background: #000;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* خلفية النجوم */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://i.ibb.co/8DpM5W0/stars.png') repeat;
+            animation: moveStars 50s linear infinite;
+            z-index: 0;
+        }
+        @keyframes moveStars {
+            from { background-position: 0 0; }
+            to { background-position: -10000px 5000px; }
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            animation: fadeInDown 2s ease;
+            position: relative;
+            z-index: 1;
+        }
+        header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            color: #00ff00;
+        }
+        header p {
+            font-size: 24px;
+        }
+        .kings {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 40px 0;
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        .king-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            width: 250px;
+            text-align: center;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.5s, box-shadow 0.5s;
+            overflow: hidden;
+            position: relative;
+        }
+        .king-card:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px #00ff00;
+        }
+        .king-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            animation: float 3s infinite ease-in-out;
+        }
+        .story {
+            display: none;
+            margin-top: 15px;
+            font-size: 18px;
+            color: #ffd700;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8);}
+            to { opacity: 1; transform: scale(1);}
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            font-size: 16px;
+            margin-top: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* زر الصوت */
+        #music-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #00ff00;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 10;
+        }
+        #music-btn:hover {
+            background: #ffd700;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars"></div>
+
+    <button id="music-btn" onclick="toggleMusic()">تشغيل الموسيقى</button>
+
+    <header>
+        <h1>رحلة ملوك المملكة</h1>
+        <p>تاريخنا فخر ومستقبلنا مجد</p>
+    </header>
+
+    <section class="kings">
+        <div class="king-card" onclick="toggleStory('story1')">
+            <img src="aziz.png">
+            <h2>الملك عبدالعزيز</h2>
+            <div id="story1" class="story">
+                وحد المملكة بعد رحلة كفاح طويلة. استعاد الرياض عام 1902، وأسس المملكة في 1932.
+            </div>
+        </div>
+
+        <div class="king-card" onclick="toggleStory('story2')">
+            <img src="sud.jpg">
+            <h2>الملك فيصل</h2>
+            <div id="story2" class="story">
+                بطل النفط والدبلوماسية، قاد مقاطعة النفط العالمية عام 1973 دعماً لفلسطين.
+            </div>
+        </div>
+
+        <div class="king-card" onclick="toggleStory('story3')">
+            <img src="slman.jpg"
+            <h2>الملك سلمان</h2>
+            <div id="story3" class="story">
+                أطلق رؤية السعودية 2030، يقود نهضة تنموية شاملة في جميع المجالات.
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        صنع بحب وفخر للمملكة العربية السعودية
+    </footer>
+
+    <audio id="bg-music" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2023/04/05/audio_62cc3165f7.mp3?filename=the-sound-of-success-145828.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function toggleStory(id) {
+            const story = document.getElementById(id);
+            const allStories = document.querySelectorAll('.story');
+            allStories.forEach(s => {
+                if (s.id !== id) {
+                    s.style.display = 'none';
+                }
+            });
+            story.style.display = (story.style.display === 'block') ? 'none' : 'block';
+        }
+
+        let musicPlaying = false;
+        const music = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-btn');
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                music.pause();
+                musicBtn.innerText = "تشغيل الموسيقى";
+            } else {
+                music.play();
+                musicBtn.innerText = "إيقاف الموسيقى";
+            }
+            musicPlaying = !musicPlaying;
+        }
+    </script>
+
+</body>
+</html>
